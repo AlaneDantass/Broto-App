@@ -1,0 +1,24 @@
+[package]
+name = "broto"
+version = "0.1.0"
+description = "Sanctuary for your mind"
+authors = ["Alane"]
+edition = "2021"
+
+[build-dependencies]
+tauri-build = { version = "2.0", features = [] }
+
+[dependencies]
+tauri = { version = "2.0", features = ["shell-open"] }
+tauri-plugin-opener = "2"
+tauri-plugin-deep-link = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[features]
+default = ["custom-protocol"]
+custom-protocol = ["tauri/custom-protocol"]
+
+[profile.release]
+opt-level = "z"
+lto = true

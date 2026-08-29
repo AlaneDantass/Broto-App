@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Broto — Sanctuary for your mind</title>
+    <!-- Aplica tema instantaneamente antes do React carregar para evitar flash -->
+    <script>
+      (function() {
+        var tema = localStorage.getItem("broto_tema") || "claro";
+        var animacoes = localStorage.getItem("broto_reduzir_animacoes") || "false";
+        var cores = localStorage.getItem("broto_poucas_cores") || "false";
+        document.documentElement.setAttribute("data-tema", tema);
+        document.documentElement.setAttribute("data-reduzir-animacoes", animacoes);
+        document.documentElement.setAttribute("data-poucas-cores", cores);
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+
+    <div vw class="enabled">
+      <div vw-access-button class="active"></div>
+      <div vw-plugin-wrapper>
+        <div class="vw-plugin-top-wrapper"></div>
+      </div>
+    </div>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+      new window.VLibras.Widget('https://vlibras.gov.br/app');
+    </script>
+  </body>
+</html>

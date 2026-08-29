@@ -1,0 +1,353 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TEMA: CLARO (padrão)
+   Paleta original do Broto — verde/creme/terracota
+   ═══════════════════════════════════════════════════════════════════════════ */
+:root,
+[data-tema="claro"] {
+  /* Surface */
+  --color-surface:                    #fbfaf9;
+  --color-surface-dim:                #e6e1d6;
+  --color-surface-bright:             #fcfcfa;
+  --color-surface-container-lowest:   #ffffff;
+  --color-surface-container-low:      #f4efdcff;
+  --color-surface-container:          #fdf8ebff;
+  --color-surface-container-high:     #eeeae3;
+  --color-surface-container-highest:  #e8e3d9;
+  --color-surface-variant:            #e5e9e2;
+  --color-on-surface:                 #2f2a1d;
+  --color-on-surface-variant:         #505d46;
+  --color-inverse-surface:            #463d2b;
+  --color-inverse-on-surface:         #f5f3ef;
+  --color-surface-tint:               #577e44;
+
+  /* Outline */
+  --color-outline:                    #788c69;
+  --color-outline-variant:            #cbd3c5;
+
+  /* Primary */
+  --color-primary:                    #577e44;
+  --color-on-primary:                 #ffffff;
+  --color-primary-container:          #ddead7;
+  --color-on-primary-container:       #2e4224;
+  --color-inverse-primary:            #c1d8b6;
+
+  /* Secondary */
+  --color-secondary:                  #a04b59;
+  --color-on-secondary:               #ffffff;
+  --color-secondary-container:        #efdcdf;
+  --color-on-secondary-container:     #53272f;
+
+  /* Tertiary */
+  --color-tertiary:                   #7f5991;
+  --color-on-tertiary:                #ffffff;
+  --color-tertiary-container:         #e5dcea;
+  --color-on-tertiary-container:      #45304f;
+
+  /* Error */
+  --color-error:                      #a13d36;
+  --color-on-error:                   #ffffff;
+  --color-error-container:            #f2dad9;
+  --color-on-error-container:         #54201c;
+
+  /* Background */
+  --color-background:                 #FFE8D6;
+  --color-on-background:              #2c271b;
+
+  /* Sidebar */
+  --color-sidebar:                    #405d32;
+  --color-on-sidebar:                 #f7faf5;
+
+  /* Específicos */
+  --color-grid-container:             #ffffff;
+
+  /* Scrollbar */
+  --sb-track-color:                   #f5f5f5;
+  --sb-thumb-color:                   #798d73;
+  --sb-thumb-hover:                   #698062;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TEMA: ESCURO
+   Fundos escuros quentes, verdes mais suaves
+   ═══════════════════════════════════════════════════════════════════════════ */
+[data-tema="escuro"] {
+  /* Surface */
+  --color-surface:                    #1e1c18;
+  --color-surface-dim:                #161410;
+  --color-surface-bright:             #2a2823;
+  --color-surface-container-lowest:   #131109;
+  --color-surface-container-low:      #242219;
+  --color-surface-container:          #2a2824;
+  --color-surface-container-high:     #34312c;
+  --color-surface-container-highest:  #3d3a34;
+  --color-surface-variant:            #3a3d36;
+  --color-on-surface:                 #e5e0d6;
+  --color-on-surface-variant:         #b0bba8;
+  --color-inverse-surface:            #e5e0d6;
+  --color-inverse-on-surface:         #2a2824;
+  --color-surface-tint:               #89b876;
+
+  /* Outline */
+  --color-outline:                    #637560;
+  --color-outline-variant:            #3a4a36;
+
+  /* Primary */
+  --color-primary:                    #89b876;
+  --color-on-primary:                 #1a3010;
+  --color-primary-container:          #2e4a24;
+  --color-on-primary-container:       #c4ddb6;
+  --color-inverse-primary:            #577e44;
+
+  /* Secondary */
+  --color-secondary:                  #e08a96;
+  --color-on-secondary:               #5a1f2a;
+  --color-secondary-container:        #6e2f3a;
+  --color-on-secondary-container:     #f5c0c7;
+
+  /* Tertiary */
+  --color-tertiary:                   #c49fd5;
+  --color-on-tertiary:                #3c1f50;
+  --color-tertiary-container:         #533568;
+  --color-on-tertiary-container:      #e5d0f2;
+
+  /* Error */
+  --color-error:                      #f28b82;
+  --color-on-error:                   #5f1410;
+  --color-error-container:            #7d2e2a;
+  --color-on-error-container:         #ffd9d6;
+
+  /* Background */
+  --color-background:                 #141210;
+  --color-on-background:              #e5e0d6;
+
+  /* Sidebar */
+  --color-sidebar:                    #253b1b;
+  --color-on-sidebar:                 #d4e8cc;
+
+  /* Específicos */
+  --color-grid-container:             #2a2824;
+
+  /* Scrollbar */
+  --sb-track-color:                   #2a2824;
+  --sb-thumb-color:                   #637560;
+  --sb-thumb-hover:                   #89b876;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TEMA: ALTO CONTRASTE
+   Preto/branco puro, sem gradações — máxima legibilidade
+   ═══════════════════════════════════════════════════════════════════════════ */
+[data-tema="alto_contraste"] {
+  /* Surface */
+  --color-surface:                    #ffffff;
+  --color-surface-dim:                #e0e0e0;
+  --color-surface-bright:             #ffffff;
+  --color-surface-container-lowest:   #ffffff;
+  --color-surface-container-low:      #f0f0f0;
+  --color-surface-container:          #f0f0f0;
+  --color-surface-container-high:     #e0e0e0;
+  --color-surface-container-highest:  #d0d0d0;
+  --color-surface-variant:            #e8e8e8;
+  --color-on-surface:                 #000000;
+  --color-on-surface-variant:         #111111;
+  --color-inverse-surface:            #000000;
+  --color-inverse-on-surface:         #ffffff;
+  --color-surface-tint:               #004f00;
+
+  /* Outline */
+  --color-outline:                    #000000;
+  --color-outline-variant:            #444444;
+
+  /* Primary */
+  --color-primary:                    #004f00;
+  --color-on-primary:                 #ffffff;
+  --color-primary-container:          #ccf0cc;
+  --color-on-primary-container:       #002000;
+  --color-inverse-primary:            #66cc66;
+
+  /* Secondary */
+  --color-secondary:                  #7a0020;
+  --color-on-secondary:               #ffffff;
+  --color-secondary-container:        #ffd0d8;
+  --color-on-secondary-container:     #3a0010;
+
+  /* Tertiary */
+  --color-tertiary:                   #4a007a;
+  --color-on-tertiary:                #ffffff;
+  --color-tertiary-container:         #e8ccff;
+  --color-on-tertiary-container:      #1e003a;
+
+  /* Error */
+  --color-error:                      #8b0000;
+  --color-on-error:                   #ffffff;
+  --color-error-container:            #ffd0d0;
+  --color-on-error-container:         #3a0000;
+
+  /* Background */
+  --color-background:                 #ffffff;
+  --color-on-background:              #000000;
+
+  /* Sidebar */
+  --color-sidebar:                    #000000;
+  --color-on-sidebar:                 #ffffff;
+
+  /* Específicos */
+  --color-grid-container:             #ffffff;
+
+  /* Scrollbar */
+  --sb-track-color:                   #e0e0e0;
+  --sb-thumb-color:                   #000000;
+  --sb-thumb-hover:                   #333333;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TEMA: NOTURNO ULTRA-SUAVE
+   Tons de mogno/âmbar quentes, baixo contraste — confortável à noite
+   ═══════════════════════════════════════════════════════════════════════════ */
+[data-tema="noturno_ultra_suave"] {
+  /* Surface */
+  --color-surface:                    #2a2218;
+  --color-surface-dim:                #1e1912;
+  --color-surface-bright:             #332a1e;
+  --color-surface-container-lowest:   #171208;
+  --color-surface-container-low:      #23201a;
+  --color-surface-container:          #2e2820;
+  --color-surface-container-high:     #38302a;
+  --color-surface-container-highest:  #423a32;
+  --color-surface-variant:            #3d3426;
+  --color-on-surface:                 #d4c5a8;
+  --color-on-surface-variant:         #a89880;
+  --color-inverse-surface:            #d4c5a8;
+  --color-inverse-on-surface:         #2e2820;
+  --color-surface-tint:               #a09070;
+
+  /* Outline */
+  --color-outline:                    #7a6a50;
+  --color-outline-variant:            #4a4030;
+
+  /* Primary */
+  --color-primary:                    #9aaa80;
+  --color-on-primary:                 #1e2c10;
+  --color-primary-container:          #2e3c20;
+  --color-on-primary-container:       #c4d4a8;
+  --color-inverse-primary:            #577e44;
+
+  /* Secondary */
+  --color-secondary:                  #c49080;
+  --color-on-secondary:               #3a1a10;
+  --color-secondary-container:        #4a2820;
+  --color-on-secondary-container:     #e0c0b0;
+
+  /* Tertiary */
+  --color-tertiary:                   #a89090;
+  --color-on-tertiary:                #2a1818;
+  --color-tertiary-container:         #3a2828;
+  --color-on-tertiary-container:      #d0b8b8;
+
+  /* Error */
+  --color-error:                      #d4806a;
+  --color-on-error:                   #2a0c04;
+  --color-error-container:            #4a1c14;
+  --color-on-error-container:         #f0c0b0;
+
+  /* Background */
+  --color-background:                 #1a1510;
+  --color-on-background:              #d4c5a8;
+
+  /* Sidebar */
+  --color-sidebar:                    #1e1a12;
+  --color-on-sidebar:                 #c8b890;
+
+  /* Específicos */
+  --color-grid-container:             #2e2820;
+
+  /* Scrollbar */
+  --sb-track-color:                   #2e2820;
+  --sb-thumb-color:                   #7a6a50;
+  --sb-thumb-hover:                   #9aaa80;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MODO: REDUZIR ANIMAÇÕES
+   Remove ou minimiza todas as transições e animações da interface
+   ═══════════════════════════════════════════════════════════════════════════ */
+[data-reduzir-animacoes="true"] *,
+[data-reduzir-animacoes="true"] *::before,
+[data-reduzir-animacoes="true"] *::after {
+  transition-duration: 0.01ms !important;
+  transition-delay: 0ms !important;
+  animation-duration: 0.01ms !important;
+  animation-delay: 0ms !important;
+  animation-iteration-count: 1 !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MODO: POUCAS CORES E POUCO TEXTO
+   Oculta elementos decorativos marcados com a classe .decorativo
+   ═══════════════════════════════════════════════════════════════════════════ */
+[data-poucas-cores="true"] .decorativo {
+  display: none !important;
+}
+
+/* Simplifica gradientes de fundo */
+[data-poucas-cores="true"] .bg-gradient-to-br,
+[data-poucas-cores="true"] .bg-gradient-to-r,
+[data-poucas-cores="true"] .bg-gradient-to-b {
+  background-image: none !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   BASE STYLES
+   ═══════════════════════════════════════════════════════════════════════════ */
+@layer base {
+  * {
+    scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+    scrollbar-width: thin;
+  }
+
+  body {
+    @apply bg-surface text-on-surface font-dm-sans;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-playfair;
+  }
+
+  h1 { @apply text-headline-lg; }
+  h2 { @apply text-headline-md; }
+  h3 { @apply text-headline-sm; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SCROLLBAR STYLES
+   ═══════════════════════════════════════════════════════════════════════════ */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--sb-track-color);
+  border-radius: 14px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+  border-radius: 14px;
+  border: none;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--sb-thumb-hover);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: var(--color-on-surface-variant);
+}
