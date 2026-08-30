@@ -1,75 +1,98 @@
-# Broto — Sanctuary for Your Mind
+# 🌱 Broto
 
-Aplicativo desktop de organização de tarefas e projetos para pessoas neurodivergentes (TEA/TDAH).
+> Organização modular, acessível e sem pressão para o seu dia a dia.
 
-## Stack
+O **Broto** é uma aplicação de gerenciamento pessoal e produtividade em fase inicial de desenvolvimento. Diferente de listas de tarefas rígidas e opressoras, o principal objetivo do projeto é oferecer uma experiência de organização que funcione como um **"quebra-cabeça" configurável**, adaptando-se à forma de pensar e à rotina única de cada usuário.
 
-- **Frontend**: Tauri 2 + React 19 + Vite + TypeScript + Tailwind CSS
-- **Backend**: Supabase (PostgreSQL + Auth + Realtime)
-- **Desktop**: Tauri CLI (empacotamento)
+Tudo isso construído com um forte compromisso com a **acessibilidade**, garantindo que a tecnologia seja uma aliada inclusiva para todos os públicos.
 
-## Desenvolvimento
+---
 
-```bash
-# Instalar dependências
-npm install
+## ✨ Funcionalidades
 
-# Iniciar dev server Vite
-npm run dev
+O Broto vai além das telas mostradas nos prints. O ecossistema está sendo preparado para ser uma central completa de produtividade saudável:
 
-# Iniciar app Tauri em dev
-npm run dev:tauri
+*   🧩 **Galeria de Blocos (Organização Modular):** 
+    Sua vida não é uma lista única. Organize suas áreas de foco (ex: Estudos Universitários, Projetos, Trabalho, Orquestra) em blocos independentes, personalizáveis com cores e categorias (tags).
+*   📥 **Triagem de Pensamentos (Inbox):** 
+    Um espaço rápido para capturar ideias passageiras antes que elas sumam. O objetivo é esvaziar a mente primeiro e, com calma, classificar o pensamento como uma **Ideia**, uma **Tarefa** ou uma **Nota**.
+*   ⏱️ **Foco com Pomodoro Integrado:**
+    Ferramentas para executar o trabalho com intervalos saudáveis (utilizando timers baseados na técnica Pomodoro), diretamente ligados às tarefas dos blocos.
+*   💡 **Ideias Futuras:** 
+    Um ambiente totalmente sem pressão dedicado a guardar inspirações, links e possibilidades que você quer explorar um dia, mas que não precisam da urgência de um prazo.
+*   ✅ **Gestão de Tarefas Dinâmicas:** 
+    Dentro de cada bloco, as tarefas são criadas e monitoradas com barras de progresso (ex: "33% concluída"), dando uma visão clara e motivadora de avanço.
+*   ♿ **Acessibilidade Nativa (VLibras):** 
+    Interface projetada desde o dia 1 para inclusão, contando com integração nativa com o **VLibras** para tradução automática do conteúdo, além de contrastes amigáveis.
+*   🤝 **Suporte e Feedback Direto:**
+    Um canal dedicado dentro do app para contato, dúvidas e sugestões, permitindo que a comunidade molde as próximas ferramentas.
+*   🔐 **Autenticação Simples e Segura:** 
+    Login tradicional e autenticação social rápida (Google/GitHub) powered by Supabase.
 
-# Build para produção
-npm run build:tauri
-```
+---
 
-## Configuração Supabase
+## 📸 Conheça o Broto
 
-Crie um arquivo `.env.local` na raiz do projeto:
+*(Algumas telas da versão atual)*
 
-```env
-VITE_SUPABASE_URL=https://jcxrcojncoibqacqdivw.supabase.co
-VITE_SUPABASE_ANON_KEY=sua-chave-anonima
-```
+### Dashboard Principal & VLibras
+![Dashboard & Acessibilidade](./prints/Vlibras.png)
 
-## Estrutura de Pastas
+### Triagem Rápida de Pensamentos
+![Triagem de Pensamentos](./prints/pensamentos.png)
 
-```
-src/
-  main.tsx          # Entrada React
-  App.tsx           # Componente raiz
-  index.css         # Estilos globais (Tailwind)
-  contexts/         # Contextos (Auth, etc)
-  lib/              # Utilidades (supabase.ts, estimativa.ts, etc)
-  types/            # Tipos TypeScript
-  routes/           # Páginas/áreas (galeria, tasks, etc)
-  components/       # Componentes reutilizáveis
-  hooks/            # Custom hooks
-src-tauri/          # Código Rust do Tauri
-  tauri.conf.json   # Config do aplicativo
-  src/main.rs       # Entrypoint Rust
-```
+### Galeria de Blocos (Seus Projetos)
+![Galeria de Blocos](./prints/blocosGaleria.png)
 
-## Design System
+### Gestão de Tarefas
+![Tarefas do Bloco](./prints/tasksBloco.png)
 
-Todos os tokens de design (cores, tipografia, espaçamento) estão definidos em `DESING.md` e configurados no `tailwind.config.js`.
+### Central de Suporte
+![Suporte](./prints/suporte.png)
 
-**Paleta Botanical Serenity**:
-- Fundo: `#fcfae2` (surface)
-- Primária: `#536347` (Muted Moss)
-- Secundária: `#535d7d` (Periwinkle Sky)
-- Tipografia: Playfair Display (títulos) + DM Sans (corpo)
+---
 
-## Próximas Fases
+## 🛠️ Tecnologias Utilizadas
 
-1. **Fase 1** — Banco de dados + Autenticação
-2. **Fase 2** — Shell de navegação (sidebar + rotas)
-3. **Fase 3** — Blocos (Block Gallery)
-4. **Fase 4** — Tasks e Modo Foco
-5. **Fase 5** — Deviation Board
-6. **Fase 6** — Calendário
-7. **Fase 7** — Future Ideas
-8. **Fase 8** — Captura de Pensamento + Triagem
-9. **Fase 9** — Configurações
-10. **Fase 10** — Polish e empacotamento
+O app é robusto e foi construído utilizando tecnologias modernas para garantir performance em qualquer tela:
+
+*   **Front-end:** React, Vite, TypeScript
+*   **Estilização e UI:** Tailwind CSS, Skeletons para loading states.
+*   **Back-end & Banco de Dados:** Supabase (PostgreSQL)
+*   **Autenticação:** Supabase Auth (OAuth)
+*   **Acessibilidade:** Integração com Widget VLibras
+
+---
+
+## 🚀 Como rodar o projeto localmente
+
+1. **Clone o repositório:**
+   ```bash
+   git clone https://github.com/AlaneDantass/Broto-App.git
+   ```
+
+2. **Entre na pasta do projeto:**
+   ```bash
+   cd Broto-App/broto
+   ```
+
+3. **Instale as dependências:**
+   ```bash
+   npm install
+   ```
+
+4. **Variáveis de Ambiente:**
+   Crie um arquivo `.env.local` na raiz com suas chaves do Supabase:
+   ```env
+   VITE_SUPABASE_URL=sua_url_aqui
+   VITE_SUPABASE_ANON_KEY=sua_chave_aqui
+   ```
+
+5. **Inicie o projeto:**
+   ```bash
+   npm run dev
+   ```
+
+---
+
+Feito com 💚 para ajudar mentes a se organizarem sem ansiedade.
