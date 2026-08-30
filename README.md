@@ -95,4 +95,3 @@ O app é robusto e foi construído utilizando tecnologias modernas para garantir
 
 ---
 
-Feito com 💚 para ajudar mentes a se organizarem sem ansiedade.
