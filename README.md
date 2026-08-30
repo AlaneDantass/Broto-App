@@ -2,7 +2,9 @@
 
 > Organização modular, acessível e sem pressão para o seu dia a dia.
 
-O **Broto** é uma aplicação de gerenciamento pessoal e produtividade em fase inicial de desenvolvimento. Diferente de listas de tarefas rígidas e opressoras, o principal objetivo do projeto é oferecer uma experiência de organização que funcione como um **"quebra-cabeça" configurável**, adaptando-se à forma de pensar e à rotina única de cada usuário.
+🔗 **Acesse a versão de testes:** [broto-app-lqw9.vercel.app](https://broto-app-lqw9.vercel.app/)
+
+⚠️ **Nota:** O Broto está em fase inicial de desenvolvimento. A ideia central daqui em diante é realizar estudos cada vez mais aprofundados para melhorar a experiência do usuário (UX). O objetivo final é tornar o aplicativo cada vez mais modular, investindo pesadamente em opções de personalização (como as peças de um **quebra-cabeça**) dentro das configurações, para que ele se adapte perfeitamente à sua rotina e não o contrário.
 
 Tudo isso construído com um forte compromisso com a **acessibilidade**, garantindo que a tecnologia seja uma aliada inclusiva para todos os públicos.
 
