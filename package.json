@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "dev:tauri": "tauri dev",
-    "build": "tsc -b && vite build",
+    "build": "vite build",
     "build:tauri": "tauri build",
     "lint": "oxlint",
     "preview": "vite preview"
