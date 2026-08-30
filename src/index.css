@@ -351,3 +351,14 @@
 ::-webkit-scrollbar-thumb:active {
   background: var(--color-on-surface-variant);
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CORREÇÃO VLIBRAS
+   Evita que o container do VLibras bloqueie cliques no resto da tela
+   ═══════════════════════════════════════════════════════════════════════════ */
+.vw-plugin-wrapper {
+  pointer-events: none !important;
+}
+.vw-plugin-wrapper > * {
+  pointer-events: auto !important;
+}

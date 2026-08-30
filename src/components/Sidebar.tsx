@@ -42,7 +42,7 @@ export const Sidebar: React.FC = () => {
   };
 
   return (
-    <aside className="w-[280px] bg-sidebar border-r border-outline-variant flex flex-col">
+    <aside className="w-[280px] bg-sidebar border-r border-outline-variant flex flex-col relative z-50">
       {/* Header */}
       <div className="p-6 border-b border-outline-variant">
         <div className="flex items-center gap-3 mb-2">
