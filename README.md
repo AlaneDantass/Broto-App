@@ -1,4 +1,4 @@
-# Broto — Sanctuary for Your Mind
+# Broto 
 
 Aplicativo desktop de organização de tarefas e projetos para pessoas neurodivergentes (TEA/TDAH).
 
