@@ -1,0 +1,21 @@
+{
+  "name": "Broto",
+  "short_name": "Broto",
+  "description": "Sanctuary for your mind",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFE8D6",
+  "theme_color": "#577e44",
+  "icons": [
+    {
+      "src": "/logo-desktop.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

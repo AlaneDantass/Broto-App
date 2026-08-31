@@ -15,6 +15,7 @@ export const Logo: React.FC<LogoProps> = ({ mono = false, className, ...props })
         className={className}
         {...props}
       >
+        <circle cx="32" cy="32" r="32" fill="currentColor" opacity=".1" />
         <path
           d="M20.5 55.5 C 26 53.5, 38 53.5, 43.5 55.5"
           fill="none"
@@ -45,6 +46,7 @@ export const Logo: React.FC<LogoProps> = ({ mono = false, className, ...props })
       className={className}
       {...props}
     >
+      <circle cx="32" cy="32" r="32" fill="var(--color-surface-container-low)" />
       <path
         d="M20.5 55.5 C 26 53.5, 38 53.5, 43.5 55.5"
         fill="none"
