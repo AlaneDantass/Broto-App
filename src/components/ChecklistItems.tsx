@@ -55,7 +55,7 @@ export const ChecklistItems: React.FC<ChecklistItemsProps> = ({
   const completed = items.filter(i => i.concluido).length;
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3" onClick={(e) => e.stopPropagation()}>
       {/* Progress Bar */}
       {items.length > 0 && (
         <div>

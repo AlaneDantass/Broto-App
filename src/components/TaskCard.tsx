@@ -37,8 +37,7 @@ export const TaskCard: React.FC<TaskCardPropsWithPomodoroUpdate> = ({
 
   return (
     <div
-      onClick={() => onToggle?.()}
-      className={`p-4 bg-surface-container border border-outline-variant rounded-lg transition-all cursor-pointer hover:bg-surface-container-high ${
+      className={`p-4 bg-surface-container border border-outline-variant rounded-lg transition-all hover:bg-surface-container-high ${
         isCompleted ? "opacity-60" : ""
       }`}
     >
