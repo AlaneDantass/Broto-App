@@ -15,7 +15,7 @@ import { IdeiasPage } from "./routes/IdeiasPage";
 import { TriagemPage } from "./routes/TriagemPage";
 import { ConfiguracoesPage } from "./routes/ConfiguracoesPage";
 import { PerfilPage } from "./routes/PerfilPage";
-import { SidebarNew, FloatingCaptureButton } from "./components";
+import { SidebarNew, FloatingCaptureButton, NotificationBell } from "./components";
 import { TransitionToast } from "./components/TransitionToast";
 import { supabase } from "./lib/supabase";
 import "./index.css";
@@ -27,8 +27,10 @@ const DashboardLayout: React.FC<{ children: React.ReactNode }> = ({ children }) 
       <div className="p-8 w-full h-full">{children}</div>
     </main>
     <FloatingCaptureButton />
+    <NotificationBell />
   </div>
 );
+
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, loading } = useAuth();

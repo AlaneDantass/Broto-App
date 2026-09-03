@@ -180,3 +180,15 @@ export interface BlocoDoDia {
   ordem: number;
   criado_em: string;
 }
+
+export interface DataImportante {
+  id: string;
+  usuario_id: string;
+  bloco_id: string;
+  titulo: string;
+  descricao?: string;
+  data: string;
+  lida: boolean;
+  criado_em: string;
+}
+

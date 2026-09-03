@@ -388,6 +388,16 @@ const translations: Record<Language, Record<string, string>> = {
     "color.custom": "Cor Personalizada",
     "color.hexCode": "Código HEX",
     "color.done": "Pronto",
+
+    "dates.title": "Datas Importantes",
+    "dates.add": "Adicionar Data",
+    "dates.noDates": "Nenhuma data importante definida para este bloco.",
+    "dates.titleLabel": "Título",
+    "dates.descLabel": "Descrição (opcional)",
+    "dates.dateLabel": "Data",
+    "notifications.title": "Notificações",
+    "notifications.empty": "Nenhuma notificação nova.",
+    "notifications.markRead": "Marcar como lida",
   },
   en: {
     // Sidebar
@@ -766,6 +776,16 @@ const translations: Record<Language, Record<string, string>> = {
     "color.custom": "Custom Color",
     "color.hexCode": "HEX Code",
     "color.done": "Done",
+
+    "dates.title": "Important Dates",
+    "dates.add": "Add Date",
+    "dates.noDates": "No important dates set for this block.",
+    "dates.titleLabel": "Title",
+    "dates.descLabel": "Description (optional)",
+    "dates.dateLabel": "Date",
+    "notifications.title": "Notifications",
+    "notifications.empty": "No new notifications.",
+    "notifications.markRead": "Mark as read",
   }
 };
 

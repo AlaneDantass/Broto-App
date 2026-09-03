@@ -35,3 +35,5 @@ export { HelpModal } from "./HelpModal";
 export { DayPlanSection } from "./DayPlanSection";
 export { DayPlanBlocoCard } from "./DayPlanBlocoCard";
 export { DayPlanSelectionModal } from "./DayPlanSelectionModal";
+export { NotificationBell } from "./NotificationBell";
+export { DatasImportantesSection } from "./DatasImportantesSection";

@@ -21,6 +21,7 @@ import {
   GridContainer,
   DescricaoTexto,
   LinksBlocoSection,
+  DatasImportantesSection,
 } from "../components";
 import type { Task, Bloco } from "../types/database";
 
@@ -266,6 +267,9 @@ export const BlocoDetailPage: React.FC = () => {
 
       {/* Links do bloco */}
       <LinksBlocoSection blocoId={blocoId} />
+
+      {/* Datas Importantes */}
+      {blocoId && <DatasImportantesSection blocoId={blocoId} />}
 
       {/* Error */}
       {error && (
