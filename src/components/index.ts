@@ -32,3 +32,6 @@ export { DescricaoTexto } from "./DescricaoTexto";
 export { LinksBlocoSection } from "./LinksBlocoSection";
 export { HelpFloatingButton } from "./HelpFloatingButton";
 export { HelpModal } from "./HelpModal";
+export { DayPlanSection } from "./DayPlanSection";
+export { DayPlanBlocoCard } from "./DayPlanBlocoCard";
+export { DayPlanSelectionModal } from "./DayPlanSelectionModal";

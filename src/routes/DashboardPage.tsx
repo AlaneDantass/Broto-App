@@ -1,8 +1,10 @@
 import React, { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useBlocos } from "../hooks/useBlocos";
 import { useTasks } from "../hooks/useTasks";
+import { useBlocosDoDia } from "../hooks/useBlocosDoDia";
 import { useEventosCalendario } from "../hooks/useEventosCalendario";
-import { Card, TaskModal, EventoModal } from "../components";
+import { Card, TaskModal, EventoModal, DayPlanSection } from "../components";
 import { Clock, Plus } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useAuth } from "../contexts/AuthContext";
@@ -12,9 +14,16 @@ import type { Task } from "../types/database";
 export const DashboardPage: React.FC = () => {
   const { t, language } = useLanguage();
   const { user } = useAuth();
+  const navigate = useNavigate();
   const { blocos } = useBlocos();
   const { tasks, updateTask, createTask, loading: tasksLoading } = useTasks();
   const { eventos } = useEventosCalendario();
+  const {
+    blocosDoDia,
+    addMultipleBlocosDoDia,
+    removeBlocoDoDia,
+    reorderBlocosDoDia,
+  } = useBlocosDoDia();
 
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const [isEventModalOpen, setIsEventModalOpen] = useState(false);
@@ -133,37 +142,51 @@ export const DashboardPage: React.FC = () => {
 
   return (
     <div className="space-y-8 pb-16">
-      {/* Active Task Card */}
-      {activeTask ? (
-        <Card>
-          <div className="flex items-center gap-4">
-            <Clock size={24} className="text-primary" />
-            <div className="flex-1">
-              <p className="text-label-md text-on-surface-variant mb-1">
-                {t("dashboard.activeTask")}
+      {/* Horizontal layout: Active Task + Day Plan */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Active Task Card */}
+        {activeTask ? (
+          <Card>
+            <div className="flex items-center gap-4">
+              <Clock size={24} className="text-primary" />
+              <div className="flex-1">
+                <p className="text-label-md text-on-surface-variant mb-1">
+                  {t("dashboard.activeTask")}
+                </p>
+                <h2 className="text-headline-sm text-on-surface font-medium">
+                  {activeTask.titulo}
+                </h2>
+                <p className="text-label-sm text-on-surface-variant mt-1">
+                  {blocos.find((b) => b.id === activeTask.bloco_id)?.nome ||
+                    (language === "en" ? "No block" : "Sem bloco")}
+                </p>
+              </div>
+            </div>
+          </Card>
+        ) : (
+          <Card>
+            <div className="text-center py-8">
+              <p className="text-headline-sm text-on-surface mb-2 font-playfair">
+                {t("dashboard.noActiveTask")}
               </p>
-              <h2 className="text-headline-sm text-on-surface font-medium">
-                {activeTask.titulo}
-              </h2>
-              <p className="text-label-sm text-on-surface-variant mt-1">
-                {blocos.find((b) => b.id === activeTask.bloco_id)?.nome ||
-                  (language === "en" ? "No block" : "Sem bloco")}
+              <p className="text-body-sm text-on-surface-variant">
+                {t("dashboard.chooseTask")}
               </p>
             </div>
-          </div>
-        </Card>
-      ) : (
-        <Card>
-          <div className="text-center py-8">
-            <p className="text-headline-sm text-on-surface mb-2 font-playfair">
-              {t("dashboard.noActiveTask")}
-            </p>
-            <p className="text-body-sm text-on-surface-variant">
-              {t("dashboard.chooseTask")}
-            </p>
-          </div>
-        </Card>
-      )}
+          </Card>
+        )}
+
+        {/* Day Plan */}
+        <DayPlanSection
+          blocos={blocos}
+          blocosDoDia={blocosDoDia}
+          onAddBlocos={addMultipleBlocosDoDia}
+          onRemoveBloco={removeBlocoDoDia}
+          onReorder={reorderBlocosDoDia}
+          onNavigateToBloco={(blocoId) => navigate(`/bloco/${blocoId}`)}
+        />
+      </div>
+
 
       {/* Two Column Layout: Today's Tasks + Events inside a unified Card */}
       <Card>

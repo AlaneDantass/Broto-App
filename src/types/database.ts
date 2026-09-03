@@ -170,3 +170,13 @@ export interface PerfilUsuario {
   criado_em: string;
   atualizado_em: string;
 }
+
+export interface BlocoDoDia {
+  id: string;
+  usuario_id: string;
+  bloco_id: string;
+  data: string;
+  prioridade: "urgente" | "bloqueadora" | "importante" | null;
+  ordem: number;
+  criado_em: string;
+}
