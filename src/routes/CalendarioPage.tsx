@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useEventosCalendario } from "../hooks/useEventosCalendario";
 import { Card, EventoModal, SkeletonLoader } from "../components";
+import { RoutineGrid } from "../components/RoutineGrid";
 import { useLanguage } from "../contexts/LanguageContext";
 import type { EventoCalendario } from "../types/database";
 interface ColorPreset {
@@ -14,15 +15,17 @@ export const CalendarioPage: React.FC = () => {
   const { loading, error, getEventosDoDia, createEvento, updateEvento, deleteEvento } =
     useEventosCalendario();
 
+  const [viewType, setViewType] = useState<"day" | "week" | "month">("month");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedEvento, setSelectedEvento] = useState<EventoCalendario | undefined>(undefined);
 
   const today = new Date();
-  const [currentDate, setCurrentDate] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
+  const [currentDate, setCurrentDate] = useState(new Date(today.getFullYear(), today.getMonth(), today.getDate()));
 
   const ano = currentDate.getFullYear();
   const mes = currentDate.getMonth();
+  const diaAtual = currentDate.getDate();
 
   // Dias do mês
   const primeiroDia = new Date(ano, mes, 1);
@@ -39,12 +42,16 @@ export const CalendarioPage: React.FC = () => {
     dias.push(i);
   }
 
-  const handlePrevMonth = () => {
-    setCurrentDate(new Date(ano, mes - 1, 1));
+  const handlePrev = () => {
+    if (viewType === "month") setCurrentDate(new Date(ano, mes - 1, 1));
+    else if (viewType === "week") setCurrentDate(new Date(ano, mes, diaAtual - 7));
+    else setCurrentDate(new Date(ano, mes, diaAtual - 1));
   };
 
-  const handleNextMonth = () => {
-    setCurrentDate(new Date(ano, mes + 1, 1));
+  const handleNext = () => {
+    if (viewType === "month") setCurrentDate(new Date(ano, mes + 1, 1));
+    else if (viewType === "week") setCurrentDate(new Date(ano, mes, diaAtual + 7));
+    else setCurrentDate(new Date(ano, mes, diaAtual + 1));
   };
 
   const handleToday = () => {
@@ -135,6 +142,39 @@ export const CalendarioPage: React.FC = () => {
     );
   }
 
+  // Generate days based on viewType
+  let diasView: { d: number | null, dataStr: string }[] = [];
+  let headerDays: string[] = diasSemanaTraduzidos;
+
+  if (viewType === "month") {
+    for (let i = 0; i < primeiroFinDeSemana; i++) {
+      diasView.push({ d: null, dataStr: "" });
+    }
+    for (let i = 1; i <= diasDoMes; i++) {
+      diasView.push({ 
+        d: i, 
+        dataStr: `${ano}-${String(mes + 1).padStart(2, "0")}-${String(i).padStart(2, "0")}` 
+      });
+    }
+  } else if (viewType === "week") {
+    const dayOfWeek = currentDate.getDay();
+    const firstDayOfWeek = new Date(ano, mes, diaAtual - dayOfWeek);
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(firstDayOfWeek);
+      d.setDate(d.getDate() + i);
+      diasView.push({
+        d: d.getDate(),
+        dataStr: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`
+      });
+    }
+  } else if (viewType === "day") {
+    headerDays = [diasSemanaTraduzidos[currentDate.getDay()]];
+    diasView.push({
+      d: diaAtual,
+      dataStr: `${ano}-${String(mes + 1).padStart(2, "0")}-${String(diaAtual).padStart(2, "0")}`
+    });
+  }
+
   return (
     <div className="space-y-4 pb-16">
       {/* Header */}
@@ -157,13 +197,38 @@ export const CalendarioPage: React.FC = () => {
       )}
 
       {/* Navigation */}
-      <div className="flex items-center justify-between">
-        <h2 className="text-headline-sm text-on-surface font-playfair">
-          {mesesTraduzidos[mes]} {ano}
-        </h2>
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-4">
+          <h2 className="text-headline-sm text-on-surface font-playfair min-w-[150px]">
+            {viewType === "day" 
+              ? `${diaAtual} ${mesesTraduzidos[mes]} ${ano}`
+              : `${mesesTraduzidos[mes]} ${ano}`
+            }
+          </h2>
+          <div className="flex bg-surface-variant rounded-lg p-1">
+            <button
+              onClick={() => setViewType("day")}
+              className={`px-3 py-1 text-label-sm rounded-md transition-colors ${viewType === "day" ? "bg-surface shadow-sm text-on-surface" : "text-on-surface-variant hover:text-on-surface"}`}
+            >
+              Dia
+            </button>
+            <button
+              onClick={() => setViewType("week")}
+              className={`px-3 py-1 text-label-sm rounded-md transition-colors ${viewType === "week" ? "bg-surface shadow-sm text-on-surface" : "text-on-surface-variant hover:text-on-surface"}`}
+            >
+              Semana
+            </button>
+            <button
+              onClick={() => setViewType("month")}
+              className={`px-3 py-1 text-label-sm rounded-md transition-colors ${viewType === "month" ? "bg-surface shadow-sm text-on-surface" : "text-on-surface-variant hover:text-on-surface"}`}
+            >
+              Mês
+            </button>
+          </div>
+        </div>
         <div className="flex gap-2">
           <button
-            onClick={handlePrevMonth}
+            onClick={handlePrev}
             className="px-3 py-1.5 bg-surface-variant hover:bg-surface-variant-high rounded-lg text-label-md transition-colors"
           >
             {t("calendar.prev")}
@@ -175,7 +240,7 @@ export const CalendarioPage: React.FC = () => {
             {t("calendar.today")}
           </button>
           <button
-            onClick={handleNextMonth}
+            onClick={handleNext}
             className="px-3 py-1.5 bg-surface-variant hover:bg-surface-variant-high rounded-lg text-label-md transition-colors"
           >
             {t("calendar.next")}
@@ -186,8 +251,8 @@ export const CalendarioPage: React.FC = () => {
       {/* Calendar Grid */}
       <div className="bg-surface-variant rounded-lg overflow-hidden border border-outline-variant">
         {/* Dias da semana */}
-        <div className="grid grid-cols-7 bg-surface-variant-high">
-          {diasSemanaTraduzidos.map((dia) => (
+        <div className={`grid ${viewType === 'day' ? 'grid-cols-1' : 'grid-cols-7'} bg-surface-variant-high`}>
+          {headerDays.map((dia) => (
             <div
               key={dia}
               className="py-2 text-center text-label-sm font-semibold text-on-surface-variant border-b border-outline-variant"
@@ -197,40 +262,39 @@ export const CalendarioPage: React.FC = () => {
           ))}
         </div>
 
-        {/* Dias do mês */}
-        <div className="grid grid-cols-7">
-          {dias.map((dia, idx) => {
-            const isToday =
-              dia &&
-              dia === today.getDate() &&
-              mes === today.getMonth() &&
-              ano === today.getFullYear();
+        {/* Dias */}
+        <div className={`grid ${viewType === 'day' ? 'grid-cols-1' : 'grid-cols-7'}`}>
+          {diasView.map((diaObj, idx) => {
+            const { d, dataStr } = diaObj;
+            
+            let isToday = false;
+            if (dataStr) {
+              const [y, m, day] = dataStr.split("-").map(Number);
+              isToday = day === today.getDate() && (m - 1) === today.getMonth() && y === today.getFullYear();
+            }
 
-            const dataStr = dia
-              ? `${ano}-${String(mes + 1).padStart(2, "0")}-${String(dia).padStart(2, "0")}`
-              : "";
             const eventosDoDia = dataStr ? getEventosDoDia(dataStr) : [];
 
             return (
               <div
                 key={idx}
-                onClick={() => dia && handleCellClick(dataStr)}
-                className={`h-[72px] p-1 border-r border-b border-outline-variant flex flex-col justify-between transition-colors ${
-                  !dia
+                onClick={() => d && handleCellClick(dataStr)}
+                className={`${viewType === "month" ? "h-[72px]" : "h-32"} p-1 border-r border-b border-outline-variant flex flex-col justify-between transition-colors ${
+                  !d
                     ? "bg-surface-variant-low"
                     : isToday
                     ? "bg-primary-container/20 hover:bg-primary-container/30 cursor-pointer"
                     : "bg-surface hover:bg-surface-variant-low cursor-pointer"
                 }`}
               >
-                {dia ? (
+                {d ? (
                   <>
                     <div
                       className={`text-label-xs font-bold leading-none self-start ${
                         isToday ? "text-primary" : "text-on-surface-variant"
                       }`}
                     >
-                      {dia}
+                      {d}
                     </div>
                     <div className="space-y-0.5 overflow-hidden flex-1 mt-1 flex flex-col justify-end">
                       {eventosDoDia.slice(0, 2).map((evento) => (
@@ -282,6 +346,8 @@ export const CalendarioPage: React.FC = () => {
           </div>
         ))}
       </div>
+
+      <RoutineGrid />
 
       <EventoModal
         isOpen={isModalOpen}

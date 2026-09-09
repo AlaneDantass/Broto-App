@@ -1,0 +1,1 @@
+ALTER TABLE configuracoes_usuario ADD COLUMN IF NOT EXISTS horario_inicio_dia TEXT DEFAULT '08:00', ADD COLUMN IF NOT EXISTS intervalo_rotina_minutos INTEGER DEFAULT 60, ADD COLUMN IF NOT EXISTS tags_rotina_semanal JSONB DEFAULT '{}'::jsonb;

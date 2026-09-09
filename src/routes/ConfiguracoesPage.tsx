@@ -140,10 +140,28 @@ export const ConfiguracoesPage: React.FC = () => {
           </p>
         </div>
 
+        {/* Start of Day */}
+        <div>
+          <label className="block text-label-md text-on-surface mb-2">
+            Início do dia (Quadro de Rotina)
+          </label>
+          <input
+            type="time"
+            value={localValues["horario_inicio_dia"] !== undefined ? localValues["horario_inicio_dia"] : (config.horario_inicio_dia || "08:00")}
+            onChange={(e) => setLocalValues(prev => ({ ...prev, horario_inicio_dia: e.target.value }))}
+            onBlur={(e) => handleUpdate("horario_inicio_dia", e.target.value)}
+            className="w-full px-4 py-2 bg-surface border border-outline rounded-lg text-body-md text-on-surface focus:outline-none focus:border-primary"
+          />
+          <p className="text-body-sm text-on-surface-variant mt-2">
+            A partir de qual horário sua tabela semanal deve começar.
+          </p>
+        </div>
+
         {/* End of Day */}
         <div>
           <label className="block text-label-md text-on-surface mb-2">
             {t("settings.horarioFimDia")}
+
           </label>
           <input
             type="time"
@@ -154,6 +172,24 @@ export const ConfiguracoesPage: React.FC = () => {
           />
           <p className="text-body-sm text-on-surface-variant mt-2">
             {t("settings.horarioFimDiaDesc")}
+          </p>
+        </div>
+
+        {/* Intervalo */}
+        <div>
+          <label className="block text-label-md text-on-surface mb-2">
+            Intervalo do Quadro de Rotina
+          </label>
+          <select
+            value={config.intervalo_rotina_minutos || 60}
+            onChange={(e) => handleUpdate("intervalo_rotina_minutos", parseInt(e.target.value))}
+            className="w-full px-4 py-2 bg-surface border border-outline rounded-lg text-body-md text-on-surface focus:outline-none focus:border-primary cursor-pointer"
+          >
+            <option value="60">A cada 1 hora</option>
+            <option value="30">A cada 30 minutos</option>
+          </select>
+          <p className="text-body-sm text-on-surface-variant mt-2">
+            Define como as linhas de horário serão divididas na visão da semana.
           </p>
         </div>
       </SettingsSection>

@@ -136,7 +136,10 @@ export interface Pensamento {
 export interface ConfiguracaoUsuario {
   usuario_id: string;
   limiar_hiperfoco_percentual: number;
+  horario_inicio_dia: string;
   horario_fim_dia: string;
+  intervalo_rotina_minutos: number;
+  tags_rotina_semanal: Record<string, { nome: string; cor: string }>;
   estimativa_ia_ativa: boolean;
   campo_energia_estimada_visivel: boolean;
   campo_contexto_visivel: boolean;
