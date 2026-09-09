@@ -130,7 +130,7 @@ export const RoutineGrid: React.FC = () => {
     } else {
       newEvents.push({
         ...editingEvent,
-        id: crypto.randomUUID()
+        id: (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : Math.random().toString(36).substring(2, 15)
       } as EventoRotina);
     }
     
@@ -139,6 +139,7 @@ export const RoutineGrid: React.FC = () => {
       setEditingEvent(null);
     } catch (err) {
       console.error("Erro ao salvar evento:", err);
+      alert("Erro ao salvar: Verifique se a coluna 'eventos_rotina_semanal' existe no banco de dados.");
     }
   };
 
