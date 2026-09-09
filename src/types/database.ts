@@ -133,6 +133,15 @@ export interface Pensamento {
   criado_em: string;
 }
 
+export interface EventoRotina {
+  id: string;
+  dia: number;
+  inicio_minutos: number;
+  fim_minutos: number;
+  titulo: string;
+  cor: string;
+}
+
 export interface ConfiguracaoUsuario {
   usuario_id: string;
   limiar_hiperfoco_percentual: number;
@@ -140,6 +149,7 @@ export interface ConfiguracaoUsuario {
   horario_fim_dia: string;
   intervalo_rotina_minutos: number;
   tags_rotina_semanal: Record<string, { nome: string; cor: string }>;
+  eventos_rotina_semanal?: EventoRotina[];
   estimativa_ia_ativa: boolean;
   campo_energia_estimada_visivel: boolean;
   campo_contexto_visivel: boolean;
