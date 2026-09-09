@@ -4,6 +4,9 @@ import { ChecklistItems } from "./ChecklistItems";
 import { DescricaoTexto } from "./DescricaoTexto";
 import type { Task } from "../types/database";
 import { useLanguage } from "../contexts/LanguageContext";
+import { useBlocos } from "../hooks/useBlocos";
+import { useTasks } from "../hooks/useTasks";
+import { MoreVertical } from "lucide-react";
 
 interface TaskCardProps {
   task: Task;
@@ -32,8 +35,21 @@ export const TaskCard: React.FC<TaskCardPropsWithPomodoroUpdate> = ({
   const { t } = useLanguage();
   const [isExpanded, setIsExpanded] = React.useState(false);
   const [showPomodoroEditor, setShowPomodoroEditor] = React.useState(false);
+  const [showMoveMenu, setShowMoveMenu] = React.useState(false);
+
+  const { blocos } = useBlocos();
+  const { updateTask } = useTasks();
 
   const isCompleted = task.status === "concluida";
+
+  const handleMoveTask = async (blocoId: string) => {
+    setShowMoveMenu(false);
+    try {
+      await updateTask(task.id, { bloco_id: blocoId });
+    } catch (err) {
+      console.error("Erro ao mover task:", err);
+    }
+  };
 
   return (
     <div
@@ -212,6 +228,59 @@ export const TaskCard: React.FC<TaskCardPropsWithPomodoroUpdate> = ({
               <Trash2 size={18} />
             </button>
           )}
+
+          {/* Mover Tarefa (Kebab Menu) */}
+          <div className="relative">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowMoveMenu(!showMoveMenu);
+              }}
+              title="Mover tarefa"
+              className="p-2 text-[#A5A58D] hover:text-[#6B705C] hover:bg-[#A5A58D] hover:bg-opacity-20 rounded transition-colors"
+            >
+              <MoreVertical size={18} />
+            </button>
+            {showMoveMenu && (
+              <>
+                {/* Overlay invisível para capturar clicks fora */}
+                <div
+                  className="fixed inset-0 z-10"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowMoveMenu(false);
+                  }}
+                />
+                <div
+                  className="absolute right-0 top-full mt-1 w-48 bg-surface rounded-lg shadow-lg border border-outline-variant z-20 py-1"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="px-3 py-2 text-label-xs font-semibold text-on-surface-variant uppercase tracking-wider border-b border-outline-variant">
+                    Mover para...
+                  </div>
+                  <div className="max-h-48 overflow-y-auto">
+                    {blocos
+                      .filter((b) => b.id !== task.bloco_id)
+                      .map((b) => (
+                        <button
+                          key={b.id}
+                          onClick={() => handleMoveTask(b.id)}
+                          className="w-full text-left px-4 py-2 text-body-sm text-on-surface hover:bg-surface-container-high transition-colors truncate"
+                          title={b.nome}
+                        >
+                          {b.nome}
+                        </button>
+                      ))}
+                    {blocos.filter((b) => b.id !== task.bloco_id).length === 0 && (
+                      <div className="px-4 py-3 text-body-sm text-on-surface-variant italic text-center">
+                        Nenhum outro bloco
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
 

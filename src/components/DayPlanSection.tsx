@@ -28,6 +28,7 @@ interface DayPlanSectionProps {
   ) => Promise<void>;
   onRemoveBloco: (id: string) => Promise<void>;
   onReorder: (items: { id: string; ordem: number }[]) => Promise<void>;
+  onUpdateBlocoDoDia?: (id: string, updates: Partial<Omit<BlocoDoDia, "id" | "usuario_id" | "criado_em">>) => Promise<void>;
   onNavigateToBloco?: (blocoId: string) => void;
 }
 
@@ -46,6 +47,7 @@ export const DayPlanSection: React.FC<DayPlanSectionProps> = ({
   onAddBlocos,
   onRemoveBloco,
   onReorder,
+  onUpdateBlocoDoDia,
   onNavigateToBloco,
 }) => {
   const { t, language } = useLanguage();
@@ -220,6 +222,9 @@ export const DayPlanSection: React.FC<DayPlanSectionProps> = ({
                             bloco={getBlocoById(blocoDoDia.bloco_id)}
                             onRemove={onRemoveBloco}
                             onClick={onNavigateToBloco}
+                            onToggleConcluido={(id, concluido) => {
+                              onUpdateBlocoDoDia?.(id, { concluido });
+                            }}
                           />
                         ))}
                       </div>

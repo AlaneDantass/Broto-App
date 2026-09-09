@@ -129,7 +129,9 @@ export const SidebarNew: React.FC = () => {
       {/* Toggle expandir */}
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="p-1.5 rounded-lg text-on-sidebar hover:bg-on-sidebar/10 transition-colors mx-auto"
+        className={`p-1.5 rounded-lg text-on-sidebar hover:bg-on-sidebar/10 transition-colors ${
+          isExpanded ? "mr-auto ml-2" : "mx-auto"
+        }`}
         title={isExpanded ? t("sidebar.collapse") : t("sidebar.expand")}
       >
         <ChevronRight
@@ -152,7 +154,7 @@ export const SidebarNew: React.FC = () => {
             <a
               key={item.path}
               href={item.path}
-              className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-all whitespace-nowrap ${
+              className={`w-full flex items-center ${isExpanded ? "justify-start px-3 gap-3" : "justify-center"} py-2 rounded-lg transition-all whitespace-nowrap ${
                 isActive
                   ? "bg-on-sidebar text-sidebar"
                   : "text-on-sidebar text-opacity-60 hover:text-opacity-100 hover:bg-on-sidebar/5"
@@ -161,8 +163,8 @@ export const SidebarNew: React.FC = () => {
             >
               <span className="flex-shrink-0">{item.icon}</span>
               <span
-                className={`text-body-sm font-medium transition-opacity duration-300 ${
-                  isExpanded ? "opacity-100" : "opacity-0 w-0"
+                className={`text-body-sm font-medium transition-opacity duration-300 overflow-hidden ${
+                  isExpanded ? "opacity-100" : "opacity-0 w-0 h-0"
                 }`}
               >
                 {translatedLabel}

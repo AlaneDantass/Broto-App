@@ -23,6 +23,7 @@ export const DashboardPage: React.FC = () => {
     addMultipleBlocosDoDia,
     removeBlocoDoDia,
     reorderBlocosDoDia,
+    updateBlocoDoDia,
   } = useBlocosDoDia();
 
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
@@ -183,6 +184,7 @@ export const DashboardPage: React.FC = () => {
           onAddBlocos={addMultipleBlocosDoDia}
           onRemoveBloco={removeBlocoDoDia}
           onReorder={reorderBlocosDoDia}
+          onUpdateBlocoDoDia={updateBlocoDoDia}
           onNavigateToBloco={(blocoId) => navigate(`/bloco/${blocoId}`)}
         />
       </div>

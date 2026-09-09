@@ -338,6 +338,20 @@ export const ConfiguracoesPage: React.FC = () => {
             {t("settings.pomoUntilLongBreakDesc") || "Quantas sessões completar antes de uma pausa longa"}
           </p>
         </div>
+
+        {/* Auto start break */}
+        <label className="flex items-center gap-3 cursor-pointer mt-4">
+          <input
+            type="checkbox"
+            checked={config.inicio_automatico_pausa_ativo ?? false}
+            onChange={(e) => handleUpdate("inicio_automatico_pausa_ativo", e.target.checked)}
+            disabled={isSaving}
+            className="w-5 h-5"
+          />
+          <span className="text-body-md text-on-surface">
+            Iniciar pausa automaticamente ao fim do pomodoro
+          </span>
+        </label>
       </SettingsSection>
 
       {/* Optional Modules */}
@@ -467,6 +481,37 @@ export const ConfiguracoesPage: React.FC = () => {
               <span
                 className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow border border-outline transition-transform ${
                   config.poucas_cores_pouco_texto_ativo ? "translate-x-5" : "translate-x-0"
+                }`}
+              />
+            </button>
+          </div>
+
+          {/* Modo Preto e Branco */}
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex-1 min-w-0">
+              <p className="text-label-md text-on-surface">Modo Preto e Branco</p>
+              <p className="text-body-sm text-on-surface-variant mt-0.5">
+                Remove as cores do sistema, aumentando o contraste e reduzindo o estímulo visual.
+              </p>
+            </div>
+            <button
+              id="toggle-preto-branco"
+              role="switch"
+              aria-checked={config.modo_preto_branco_ativo ?? false}
+              onClick={() => {
+                const next = !(config.modo_preto_branco_ativo ?? false);
+                document.documentElement.setAttribute("data-preto-branco", String(next));
+                localStorage.setItem("broto_preto_branco", String(next));
+                handleUpdate("modo_preto_branco_ativo", next);
+              }}
+              disabled={isSaving}
+              className={`relative flex-shrink-0 w-11 h-6 rounded-full transition-colors focus:outline-none ${
+                (config.modo_preto_branco_ativo ?? false) ? "bg-primary border border-primary" : "bg-surface-variant border border-outline"
+              }`}
+            >
+              <span
+                className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow border border-outline transition-transform ${
+                  (config.modo_preto_branco_ativo ?? false) ? "translate-x-5" : "translate-x-0"
                 }`}
               />
             </button>

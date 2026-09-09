@@ -1,6 +1,7 @@
 import React from "react";
 import { createPortal } from "react-dom";
-import { X, Pause, Play, Maximize2, Check, ChevronDown } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { X, Pause, Play, Maximize2, Check, ChevronDown, Edit2 } from "lucide-react";
 import type { Task } from "../types/database";
 import { useConfiguracoes } from "../hooks/useConfiguracoes";
 
@@ -39,6 +40,7 @@ export const PomodoroSessionScreen: React.FC<PomodoroSessionScreenProps> = ({
   totalFocusToday,
 }) => {
   const { config } = useConfiguracoes();
+  const navigate = useNavigate();
 
   if (!isActive) return null;
 
@@ -62,28 +64,40 @@ export const PomodoroSessionScreen: React.FC<PomodoroSessionScreenProps> = ({
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (progress / 100) * circumference;
 
-  let bgColor = isBreakTime ? "from-emerald-50 to-emerald-100" : "from-amber-50 to-orange-50";
-  let textColor = isBreakTime ? "text-emerald-900" : "text-amber-900";
-  let ringColor = isBreakTime ? "#10b981" : "#f59e0b";
+  let textColor = isBreakTime ? "text-sky-900" : "text-amber-900";
+  let ringColor = isBreakTime ? "#0ea5e9" : "#f59e0b"; // sky-500 for break, amber-500 for focus
   let bgStyle: React.CSSProperties = {};
   
   const bgType = config?.fundo_pomodoro_tipo || "padrao";
   
-  if (bgType === "cor" && config?.fundo_pomodoro_cor) {
-    bgColor = ""; // Remove gradient classes
-    bgStyle = { backgroundColor: config.fundo_pomodoro_cor };
-    // Maintain original text/ring colors or try to contrast them (simplest is keeping them or adding text shadow)
-  } else if (bgType === "imagem") {
-    const localImg = localStorage.getItem("broto_pomodoro_bg_image");
-    if (localImg) {
-      bgColor = "";
-      bgStyle = { 
-        backgroundImage: `url(${localImg})`, 
-        backgroundSize: "cover", 
-        backgroundPosition: "center" 
-      };
+  if (isBreakTime) {
+    // Tela azul clarinha padrão para a pausa
+    bgStyle = { backgroundColor: "#e0f2fe" }; // sky-100
+  } else {
+    // Fundo durante o foco
+    if (bgType === "cor" && config?.fundo_pomodoro_cor) {
+      bgStyle = { backgroundColor: config.fundo_pomodoro_cor };
+    } else if (bgType === "imagem") {
+      const localImg = localStorage.getItem("broto_pomodoro_bg_image");
+      if (localImg) {
+        bgStyle = { 
+          backgroundImage: `url(${localImg})`, 
+          backgroundSize: "cover", 
+          backgroundPosition: "center" 
+        };
+      } else {
+        bgStyle = { backgroundColor: "#e6eee8" };
+      }
+    } else {
+      // "padrao" - verde meio cinza e clarinho
+      bgStyle = { backgroundColor: "#e6eee8" };
     }
   }
+
+  const handleEditBackground = () => {
+    if (onMinimize) onMinimize();
+    navigate("/configuracoes");
+  };
 
   return createPortal(
     <div
@@ -100,7 +114,7 @@ export const PomodoroSessionScreen: React.FC<PomodoroSessionScreenProps> = ({
         padding: 0,
         ...bgStyle
       }}
-      className={`${bgType === "padrao" ? `bg-gradient-to-br ${bgColor}` : ""} flex flex-col items-center justify-center overflow-hidden`}
+      className={`flex flex-col items-center justify-center overflow-hidden`}
     >
       {/* Background Overlay for readability if using image */}
       {bgType === "imagem" && (
@@ -111,12 +125,12 @@ export const PomodoroSessionScreen: React.FC<PomodoroSessionScreenProps> = ({
       <div className="absolute top-6 left-6 right-6 flex items-center justify-between z-10">
         <button
           onClick={onMinimize}
-          className={`p-2 rounded-lg hover:bg-white hover:bg-opacity-30 transition-colors ${textColor}`}
+          className={`p-2 rounded-lg hover:bg-black/10 transition-colors ${textColor}`}
           title="Minimizar"
         >
           <ChevronDown size={24} />
         </button>
-        <div className="flex-1">
+        <div className="flex-1 flex justify-center">
           {taskTitle && !isBreakTime && (
             <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full ${isBreakTime ? "bg-emerald-200" : "bg-amber-200"} ${textColor} font-medium text-label-md`}>
               <span className="w-2 h-2 rounded-full bg-current opacity-60"></span>
@@ -130,16 +144,26 @@ export const PomodoroSessionScreen: React.FC<PomodoroSessionScreenProps> = ({
             </div>
           )}
         </div>
-        <button
-          onClick={onClose}
-          className={`p-2 rounded-lg hover:bg-white hover:bg-opacity-30 transition-colors ${textColor}`}
-        >
-          <X size={24} />
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleEditBackground}
+            className={`p-2 rounded-lg hover:bg-black/10 transition-colors ${textColor}`}
+            title="Personalizar fundo"
+          >
+            <Edit2 size={24} />
+          </button>
+          <button
+            onClick={onClose}
+            className={`p-2 rounded-lg hover:bg-black/10 transition-colors ${textColor}`}
+            title="Fechar"
+          >
+            <X size={24} />
+          </button>
+        </div>
       </div>
 
       {/* Main Timer Area */}
-      <div className="flex-1 flex flex-col items-center justify-center z-10 relative">
+      <div className="flex-1 w-full pr-[288px] flex flex-col items-center justify-center z-10 relative">
         {/* Timer Ring */}
         <div className="relative w-80 h-80">
           <svg className="absolute inset-0" width="320" height="320" viewBox="0 0 320 320">
@@ -182,7 +206,7 @@ export const PomodoroSessionScreen: React.FC<PomodoroSessionScreenProps> = ({
       </div>
 
       {/* Controls */}
-      <div className="absolute bottom-8 left-0 right-0 flex items-center justify-center gap-4 flex-wrap z-10">
+      <div className="absolute bottom-8 left-0 right-[288px] flex items-center justify-center gap-4 flex-wrap z-10">
         {isPaused ? (
           <button
             onClick={onResume}

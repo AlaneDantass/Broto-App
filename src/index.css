@@ -303,6 +303,14 @@
   background-image: none !important;
 }
 
+/* 
+   MODO: PRETO E BRANCO
+   Remove todas as cores do sistema (escala de cinza)
+*/
+[data-preto-branco="true"] body {
+  filter: grayscale(100%);
+}
+
 /* ═══════════════════════════════════════════════════════════════════════════
    BASE STYLES
    ═══════════════════════════════════════════════════════════════════════════ */

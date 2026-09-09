@@ -99,19 +99,24 @@ export const useBlocosDoDia = () => {
     await fetchBlocosDoDia();
   };
 
-  const updateBlocoDoDia = async (
-    id: string,
-    updates: Partial<Pick<BlocoDoDia, "prioridade" | "ordem">>
-  ) => {
+  const updateBlocoDoDia = async (id: string, updates: Partial<Omit<BlocoDoDia, "id" | "usuario_id" | "criado_em">>) => {
+    if (!user) throw new Error("Usuário não autenticado");
+
+    // Optimistic update
+    setBlocosDoDia(prev => prev.map(b => b.id === id ? { ...b, ...updates } : b));
+
     const { error: err } = await supabase
       .from("blocos_do_dia")
       .update(updates)
       .eq("id", id)
-      .eq("usuario_id", user?.id);
+      .eq("usuario_id", user.id);
 
-    if (err) throw err;
-    await fetchBlocosDoDia();
+    if (err) {
+      await fetchBlocosDoDia(); // Revert on error
+      throw err;
+    }
   };
+
 
   const reorderBlocosDoDia = async (reorderedItems: { id: string; ordem: number }[]) => {
     if (!user) return;

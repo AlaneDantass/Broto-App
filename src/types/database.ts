@@ -154,6 +154,8 @@ export interface ConfiguracaoUsuario {
   poucas_cores_pouco_texto_ativo: boolean;
   reduzir_animacoes_ativo: boolean;
   som_recompensa_ativo: boolean;
+  inicio_automatico_pausa_ativo: boolean;
+  modo_preto_branco_ativo: boolean;
   fundo_pomodoro_tipo?: "padrao" | "cor" | "imagem";
   fundo_pomodoro_cor?: string;
   atualizado_em: string;
@@ -178,6 +180,7 @@ export interface BlocoDoDia {
   data: string;
   prioridade: "urgente" | "bloqueadora" | "importante" | null;
   ordem: number;
+  concluido: boolean;
   criado_em: string;
 }
 

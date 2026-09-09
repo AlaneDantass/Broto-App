@@ -98,20 +98,39 @@ export const usePomodoroTimer = () => {
         if (newTimeRemaining <= 0) {
           // Timer finished
           if (!prev.isBreakTime) {
-            // Pomodoro finished — toca som de recompensa se ativo
+            // Pomodoro finished
             if (somRecompensaAtivo) playRewardSound();
             callbackRef.current.onComplete?.();
+            
+            // Transição para pausa
+            const newSessionCount = prev.sessionCount + 1;
+            const isLongBreak = newSessionCount >= (config?.pomodoros_ate_pausa_longa || 4);
+            const breakDuration = isLongBreak
+              ? config?.duracao_pausa_longa_minutos || 15
+              : config?.duracao_pausa_curta_minutos || 5;
+            const breakSeconds = breakDuration * 60;
+            const autoStartBreak = config?.inicio_automatico_pausa_ativo || false;
+            
+            return {
+              ...prev,
+              isActive: true,
+              isPaused: !autoStartBreak,
+              isBreakTime: true,
+              timeRemaining: breakSeconds,
+              totalTime: breakSeconds,
+              sessionCount: isLongBreak ? 0 : newSessionCount,
+            };
           } else {
             // Break finished
             callbackRef.current.onBreakComplete?.();
+            return {
+              ...prev,
+              isActive: false,
+              isPaused: false,
+              timeRemaining: 0,
+              isBreakTime: false,
+            };
           }
-
-          return {
-            ...prev,
-            isActive: false,
-            isPaused: false,
-            timeRemaining: 0,
-          };
         }
 
         return { ...prev, timeRemaining: newTimeRemaining };
@@ -121,7 +140,7 @@ export const usePomodoroTimer = () => {
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [state.isActive, state.isPaused]);
+  }, [state.isActive, state.isPaused, config, somRecompensaAtivo]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);

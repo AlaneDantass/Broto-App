@@ -66,6 +66,7 @@ export const SensorialProvider: React.FC<{ children: React.ReactNode }> = ({
     html.setAttribute("data-tema",              localStorage.getItem("broto_tema") ?? "claro");
     html.setAttribute("data-reduzir-animacoes", localStorage.getItem("broto_reduzir_animacoes") ?? "false");
     html.setAttribute("data-poucas-cores",      localStorage.getItem("broto_poucas_cores") ?? "false");
+    html.setAttribute("data-preto-branco",      localStorage.getItem("broto_preto_branco") ?? "false");
   }, []);
 
   // ── Sincroniza com o banco quando o config chegar/mudar ─────────────────
@@ -76,16 +77,19 @@ export const SensorialProvider: React.FC<{ children: React.ReactNode }> = ({
     const tema        = config.tema ?? "claro";
     const reduzir     = String(config.reduzir_animacoes_ativo ?? false);
     const poucasCores = String(config.poucas_cores_pouco_texto_ativo ?? false);
+    const pretoBranco = String(config.modo_preto_branco_ativo ?? false);
 
     html.setAttribute("data-tema",              tema);
     html.setAttribute("data-reduzir-animacoes", reduzir);
     html.setAttribute("data-poucas-cores",      poucasCores);
+    html.setAttribute("data-preto-branco",      pretoBranco);
 
     // Persiste no localStorage para a próxima navegação/render ser instantânea
     localStorage.setItem("broto_tema",                tema);
     localStorage.setItem("broto_reduzir_animacoes",   reduzir);
     localStorage.setItem("broto_poucas_cores",        poucasCores);
-  }, [config?.tema, config?.reduzir_animacoes_ativo, config?.poucas_cores_pouco_texto_ativo]);
+    localStorage.setItem("broto_preto_branco",        pretoBranco);
+  }, [config?.tema, config?.reduzir_animacoes_ativo, config?.poucas_cores_pouco_texto_ativo, config?.modo_preto_branco_ativo]);
 
 
   // ── Lembretes de Transição ───────────────────────────────────────────────

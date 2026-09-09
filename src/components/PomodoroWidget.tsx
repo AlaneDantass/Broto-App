@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { createPortal } from "react-dom";
 import { Play, Pause, X, Maximize2 } from "lucide-react";
+import { useConfiguracoes } from "../hooks/useConfiguracoes";
 
 interface PomodoroWidgetProps {
   isActive: boolean;
@@ -27,6 +28,7 @@ export const PomodoroWidget: React.FC<PomodoroWidgetProps> = ({
   onMaximize,
   taskTitle,
 }) => {
+  const { config } = useConfiguracoes();
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
@@ -71,44 +73,68 @@ export const PomodoroWidget: React.FC<PomodoroWidgetProps> = ({
   };
 
   const progress = ((totalTime - timeRemaining) / totalTime) * 100;
-  const bgColor = isBreakTime ? "bg-emerald-50" : "bg-amber-50";
-  const borderColor = isBreakTime ? "border-emerald-200" : "border-amber-200";
-  const textColor = isBreakTime ? "text-emerald-900" : "text-amber-900";
-  const accentColor = isBreakTime ? "bg-emerald-400" : "bg-amber-400";
+  
+  const borderColor = isBreakTime ? "border-sky-300" : "border-amber-200";
+  const textColor = isBreakTime ? "text-sky-900" : "text-amber-900";
+  const accentColor = isBreakTime ? "bg-sky-400" : "bg-amber-400";
+
+  const bgType = config?.fundo_pomodoro_tipo || "padrao";
+  let bgStyle: React.CSSProperties = {
+    left: `${position.x}px`,
+    top: `${position.y}px`,
+  };
+
+  if (isBreakTime) {
+    bgStyle.backgroundColor = "#e0f2fe"; // sky-100
+  } else {
+    if (bgType === "cor" && config?.fundo_pomodoro_cor) {
+      bgStyle.backgroundColor = config.fundo_pomodoro_cor;
+    } else if (bgType === "imagem") {
+      const localImg = localStorage.getItem("broto_pomodoro_bg_image");
+      if (localImg) {
+        bgStyle.backgroundImage = `url(${localImg})`;
+        bgStyle.backgroundSize = "cover";
+        bgStyle.backgroundPosition = "center";
+      } else {
+        bgStyle.backgroundColor = "#e6eee8";
+      }
+    } else {
+      // "padrao" - verde meio cinza e clarinho
+      bgStyle.backgroundColor = "#e6eee8";
+    }
+  }
 
   return createPortal(
     <div
-      className={`fixed ${bgColor} border-2 ${borderColor} rounded-2xl p-4 shadow-lg w-64 z-40 ${isDragging ? "cursor-grabbing" : "cursor-grab"}`}
-      style={{
-        left: `${position.x}px`,
-        top: `${position.y}px`,
-      }}
+      className={`fixed border-2 ${borderColor} rounded-2xl p-4 shadow-lg w-80 z-40 overflow-hidden ${isDragging ? "cursor-grabbing" : "cursor-grab"}`}
+      style={bgStyle}
       onMouseDown={handleMouseDown}
     >
+      {/* Background Overlay for readability if using image */}
+      {bgType === "imagem" && (
+        <div className="absolute inset-0 bg-white/40 backdrop-blur-[2px] z-[-1]" />
+      )}
+
       {/* Header */}
-      <div className="flex items-center justify-between mb-3">
-        <div>
-          <p className={`text-label-sm font-medium ${textColor}`}>
+      <div className="flex items-center justify-between mb-3 relative z-10 gap-2">
+        <div className="flex-1 min-w-0">
+          <p className={`text-label-sm font-medium truncate ${textColor}`}>
             {isBreakTime ? "🌿 Pausa" : "🍅 Pomodoro"}
           </p>
-          {taskTitle && !isBreakTime && (
-            <p className="text-label-xs text-on-surface-variant truncate">
-              {taskTitle}
-            </p>
-          )}
+          {/* Nome da tarefa foi removido conforme solicitado */}
         </div>
         <div className="flex gap-1">
           {onMaximize && (
             <button
               onClick={onMaximize}
-              className={`p-1.5 rounded hover:${isBreakTime ? "bg-emerald-100" : "bg-amber-100"} transition-colors`}
+              className={`p-1.5 rounded hover:bg-black/10 transition-colors`}
             >
               <Maximize2 size={16} className={textColor} />
             </button>
           )}
           <button
             onClick={onStop}
-            className={`p-1.5 rounded hover:${isBreakTime ? "bg-emerald-100" : "bg-amber-100"} transition-colors`}
+            className={`p-1.5 rounded hover:bg-black/10 transition-colors`}
           >
             <X size={16} className={textColor} />
           </button>
@@ -116,7 +142,7 @@ export const PomodoroWidget: React.FC<PomodoroWidgetProps> = ({
       </div>
 
       {/* Progress bar */}
-      <div className="mb-3 h-1.5 bg-white rounded-full overflow-hidden">
+      <div className="mb-3 h-1.5 bg-white/50 rounded-full overflow-hidden relative z-10">
         <div
           className={`h-full ${accentColor} transition-all`}
           style={{ width: `${progress}%` }}
@@ -124,18 +150,18 @@ export const PomodoroWidget: React.FC<PomodoroWidgetProps> = ({
       </div>
 
       {/* Timer */}
-      <div className={`text-center mb-4 ${textColor}`}>
-        <p className="font-playfair text-headline-sm">
+      <div className={`text-center mb-4 relative z-10 ${textColor}`}>
+        <p className="font-playfair text-headline-sm drop-shadow-sm">
           {formatTime(timeRemaining)}
         </p>
       </div>
 
       {/* Controls */}
-      <div className="flex gap-2 justify-center">
+      <div className="flex gap-2 justify-center relative z-10">
         {isPaused ? (
           <button
             onClick={onResume}
-            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg ${accentColor} ${textColor} font-medium text-label-sm hover:opacity-90 transition-opacity`}
+            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg ${accentColor} ${textColor} font-medium text-label-sm hover:opacity-90 transition-opacity shadow-sm`}
           >
             <Play size={16} />
             Retomar
@@ -143,7 +169,7 @@ export const PomodoroWidget: React.FC<PomodoroWidgetProps> = ({
         ) : (
           <button
             onClick={onPause}
-            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg ${accentColor} ${textColor} font-medium text-label-sm hover:opacity-90 transition-opacity`}
+            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-lg ${accentColor} ${textColor} font-medium text-label-sm hover:opacity-90 transition-opacity shadow-sm`}
           >
             <Pause size={16} />
             Pausar

@@ -11,6 +11,7 @@ interface DayPlanBlocoCardProps {
   bloco: Bloco | undefined;
   onRemove: (id: string) => void;
   onClick?: (blocoId: string) => void;
+  onToggleConcluido?: (id: string, concluido: boolean) => void;
 }
 
 export const DayPlanBlocoCard: React.FC<DayPlanBlocoCardProps> = ({
@@ -18,6 +19,7 @@ export const DayPlanBlocoCard: React.FC<DayPlanBlocoCardProps> = ({
   bloco,
   onRemove,
   onClick,
+  onToggleConcluido,
 }) => {
   const { language, t } = useLanguage();
   const {
@@ -58,11 +60,32 @@ export const DayPlanBlocoCard: React.FC<DayPlanBlocoCardProps> = ({
       {/* Card body */}
       <div
         onClick={() => onClick?.(bloco.id)}
-        className="flex-1 flex items-center gap-3 p-3 bg-surface hover:bg-surface-container-high rounded-lg cursor-pointer transition-colors border border-outline-variant"
+        className={`flex-1 flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors border ${
+          blocoDoDia.concluido
+            ? "bg-surface-variant/50 border-outline-variant/50 opacity-60"
+            : "bg-surface hover:bg-surface-container-high border-outline-variant"
+        }`}
       >
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleConcluido?.(blocoDoDia.id, !blocoDoDia.concluido);
+          }}
+          className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors flex-shrink-0 ${
+            blocoDoDia.concluido
+              ? "bg-primary border-primary text-on-primary"
+              : "border-outline text-transparent hover:border-primary"
+          }`}
+        >
+          <svg viewBox="0 0 14 14" fill="none" className="w-3.5 h-3.5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="2.75 7 5.5 10.5 11.25 3.5" />
+          </svg>
+        </button>
+
         {/* Block color indicator */}
         <div
-          className="w-3 h-8 rounded-sm flex-shrink-0"
+          className={`w-3 h-8 rounded-sm flex-shrink-0 ${blocoDoDia.concluido ? 'grayscale' : ''}`}
           style={{ backgroundColor: (bloco.icone as string) || "#D8ABDC" }}
         />
 
