@@ -279,7 +279,7 @@ export const CalendarioPage: React.FC = () => {
               <div
                 key={idx}
                 onClick={() => d && handleCellClick(dataStr)}
-                className={`${viewType === "month" ? "h-[72px]" : "h-32"} p-1 border-r border-b border-outline-variant flex flex-col justify-between transition-colors ${
+                className={`${viewType === "month" ? "h-[86px]" : "h-[154px]"} p-1 border-r border-b border-outline-variant flex flex-col justify-between transition-colors ${
                   !d
                     ? "bg-surface-variant-low"
                     : isToday

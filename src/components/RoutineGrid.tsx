@@ -157,8 +157,8 @@ export const RoutineGrid: React.FC = () => {
     setEditingEvent(evento);
   };
 
-  const getTop = (min: number) => ((min - startTimeMin) / interval) * 48;
-  const getHeight = (start: number, end: number) => ((end - start + interval) / interval) * 48;
+  const getTop = (min: number) => ((min - startTimeMin) / interval) * 58;
+  const getHeight = (start: number, end: number) => ((end - start + interval) / interval) * 58;
 
   const renderSelectionForDay = (day: number) => {
     if (!selectionStart || !selectionCurrent || selectionStart.day !== day) return null;
@@ -232,8 +232,8 @@ export const RoutineGrid: React.FC = () => {
             {/* Time labels column */}
             <div className="w-16 flex-shrink-0 border-r border-outline-variant flex flex-col">
               {timeSlots.map((time, i) => (
-                <div key={i} className="h-12 border-b border-outline-variant p-2 flex items-start justify-end">
-                  <span className="text-[10px] font-medium text-on-surface-variant -mt-3 bg-surface px-1">{time}</span>
+                <div key={i} className="h-[58px] border-b border-outline-variant p-2 flex items-center justify-end">
+                  <span className="text-[10px] font-medium text-on-surface-variant bg-surface px-1">{time}</span>
                 </div>
               ))}
             </div>
@@ -250,7 +250,7 @@ export const RoutineGrid: React.FC = () => {
                     return (
                       <div 
                         key={timeIdx} 
-                        className="h-12 border-b border-outline-variant hover:bg-surface-container-lowest transition-colors cursor-pointer"
+                        className="h-[58px] border-b border-outline-variant hover:bg-surface-container-lowest transition-colors cursor-pointer"
                         onMouseDown={(e) => handleMouseDown(dayIndex, cellTimeMin, e)}
                         onMouseEnter={() => handleMouseEnter(dayIndex, cellTimeMin)}
                       />
@@ -261,7 +261,7 @@ export const RoutineGrid: React.FC = () => {
                   {dayEvents.map(evento => {
                     const top = getTop(evento.inicio_minutos);
                     const height = getHeight(evento.inicio_minutos, evento.fim_minutos);
-                    if (top < 0 || top > timeSlots.length * 48) return null;
+                    if (top < 0 || top > timeSlots.length * 58) return null;
                     
                     return (
                       <div
