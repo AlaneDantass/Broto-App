@@ -5,18 +5,29 @@ import { useTasks } from "../hooks/useTasks";
 import { useBlocosDoDia } from "../hooks/useBlocosDoDia";
 import { useEventosCalendario } from "../hooks/useEventosCalendario";
 import { Card, TaskModal, EventoModal, DayPlanSection } from "../components";
+import { TaskPriorityGroup } from "../components/TaskPriorityGroup";
+import { ConfirmModal } from "../components/ConfirmModal";
 import { Clock, Plus } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
 import { useAuth } from "../contexts/AuthContext";
 import { supabase } from "../lib/supabase";
 import type { Task } from "../types/database";
 
+// Helper to organize tasks by priority
+const organizeByPriority = (taskList: Task[]) => {
+  const urgent = taskList.filter((t) => t.prioridade === "urgente").sort((a, b) => (a.ordem || 0) - (b.ordem || 0));
+  const blocking = taskList.filter((t) => t.prioridade === "bloqueadora").sort((a, b) => (a.ordem || 0) - (b.ordem || 0));
+  const important = taskList.filter((t) => t.prioridade === "importante").sort((a, b) => (a.ordem || 0) - (b.ordem || 0));
+  const noPriority = taskList.filter((t) => !t.prioridade).sort((a, b) => (a.ordem || 0) - (b.ordem || 0));
+  return { urgent, blocking, important, noPriority };
+};
+
 export const DashboardPage: React.FC = () => {
   const { t, language } = useLanguage();
   const { user } = useAuth();
   const navigate = useNavigate();
   const { blocos } = useBlocos();
-  const { tasks, updateTask, createTask, loading: tasksLoading } = useTasks();
+  const { tasks, updateTask, createTask, toggleTask, deleteTask, loading: tasksLoading } = useTasks();
   const { eventos } = useEventosCalendario();
   const {
     blocosDoDia,
@@ -27,6 +38,8 @@ export const DashboardPage: React.FC = () => {
   } = useBlocosDoDia();
 
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const [taskToDelete, setTaskToDelete] = useState<string | null>(null);
   const [isEventModalOpen, setIsEventModalOpen] = useState(false);
 
   const today = useMemo(() => {
@@ -52,12 +65,12 @@ export const DashboardPage: React.FC = () => {
     [tasks]
   );
 
-  // Tasks de hoje
+  // Tasks de hoje e sem data fixa
   const todayTasks = useMemo(
     () =>
       tasks.filter(
         (t) =>
-          t.prazo_data === today &&
+          (!t.prazo_data || t.prazo_data === today) &&
           t.status !== "concluida"
       ),
     [tasks, today]
@@ -82,14 +95,7 @@ export const DashboardPage: React.FC = () => {
     return { completed, incomplete: total - completed, total };
   }, [tasks, yesterday]);
 
-  const handleToggleTask = async (taskId: string, currentStatus: string) => {
-    const newStatus = currentStatus === "concluida" ? "pendente" : "concluida";
-    try {
-      await updateTask(taskId, { status: newStatus });
-    } catch (err) {
-      console.error("Erro ao atualizar task:", err);
-    }
-  };
+
 
   const geralBloco = useMemo(() => {
     return blocos.find((b) => b.nome === "Geral" || b.nome === "General");
@@ -138,6 +144,17 @@ export const DashboardPage: React.FC = () => {
       setIsTaskModalOpen(false);
     } catch (err) {
       console.error("Erro ao criar task global:", err);
+    }
+  };
+
+  const handleUpdateTask = async (taskData: Partial<Omit<Task, "id" | "usuario_id" | "criado_em" | "atualizado_em">>) => {
+    if (!selectedTask) return;
+    try {
+      await updateTask(selectedTask.id, taskData);
+      setIsTaskModalOpen(false);
+      setSelectedTask(null);
+    } catch (err) {
+      console.error("Erro ao atualizar task:", err);
     }
   };
 
@@ -213,36 +230,54 @@ export const DashboardPage: React.FC = () => {
                 {t("dashboard.noTasksToday")}
               </p>
             ) : (
-              <div className="space-y-2">
-                {todayTasks.map((task) => (
-                  <div
-                    key={task.id}
-                    onClick={() => handleToggleTask(task.id, task.status)}
-                    className="flex items-center gap-3 p-3 bg-surface hover:bg-surface-container-high rounded-lg cursor-pointer transition-colors border border-outline-variant group"
-                  >
-                    <div className="flex-shrink-0 flex items-center justify-center w-5 h-5">
-                      {task.status === "concluida" ? (
-                        <div className="w-5 h-5 rounded border-2 border-[#6B705C] bg-[#6B705C]" />
-                      ) : (
-                        <div className="w-5 h-5 rounded border-2 border-[#A5A58D]" />
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <p
-                        className={`text-body-sm ${
-                          task.status === "concluida"
-                            ? "line-through text-on-surface-variant"
-                            : "text-on-surface"
-                        }`}
-                      >
-                        {task.titulo}
-                      </p>
-                      <p className="text-label-xs text-on-surface-variant">
-                        {blocos.find((b) => b.id === task.bloco_id)?.nome}
-                      </p>
-                    </div>
-                  </div>
-                ))}
+              <div className="space-y-6">
+                {(() => {
+                  const byPriority = organizeByPriority(todayTasks);
+                  return (
+                    <>
+                      <TaskPriorityGroup
+                        tasks={byPriority.urgent}
+                        prioridade="urgente"
+                        onToggle={(id, status) => toggleTask(id, status)}
+                        onEdit={(task) => {
+                          setSelectedTask(task);
+                          setIsTaskModalOpen(true);
+                        }}
+                        onDelete={setTaskToDelete}
+                      />
+                      <TaskPriorityGroup
+                        tasks={byPriority.blocking}
+                        prioridade="bloqueadora"
+                        onToggle={(id, status) => toggleTask(id, status)}
+                        onEdit={(task) => {
+                          setSelectedTask(task);
+                          setIsTaskModalOpen(true);
+                        }}
+                        onDelete={setTaskToDelete}
+                      />
+                      <TaskPriorityGroup
+                        tasks={byPriority.important}
+                        prioridade="importante"
+                        onToggle={(id, status) => toggleTask(id, status)}
+                        onEdit={(task) => {
+                          setSelectedTask(task);
+                          setIsTaskModalOpen(true);
+                        }}
+                        onDelete={setTaskToDelete}
+                      />
+                      <TaskPriorityGroup
+                        tasks={byPriority.noPriority}
+                        prioridade={null}
+                        onToggle={(id, status) => toggleTask(id, status)}
+                        onEdit={(task) => {
+                          setSelectedTask(task);
+                          setIsTaskModalOpen(true);
+                        }}
+                        onDelete={setTaskToDelete}
+                      />
+                    </>
+                  );
+                })()}
               </div>
             )}
           </div>
@@ -366,12 +401,33 @@ export const DashboardPage: React.FC = () => {
       {isTaskModalOpen && (
         <TaskModal
           isOpen={isTaskModalOpen}
-          onClose={() => setIsTaskModalOpen(false)}
-          onSubmit={handleCreateTask}
-          blocoId={geralBloco?.id || "temp-id"}
+          onClose={() => {
+            setIsTaskModalOpen(false);
+            setSelectedTask(null);
+          }}
+          onSubmit={selectedTask ? handleUpdateTask : handleCreateTask}
+          initialTask={selectedTask || undefined}
+          blocoId={selectedTask?.bloco_id || geralBloco?.id || "temp-id"}
           loading={tasksLoading}
         />
       )}
+
+      <ConfirmModal
+        isOpen={!!taskToDelete}
+        onClose={() => setTaskToDelete(null)}
+        onConfirm={async () => {
+          if (taskToDelete) {
+            try {
+              await deleteTask(taskToDelete);
+            } catch (err) {
+              console.error("Erro ao deletar task:", err);
+            }
+          }
+          setTaskToDelete(null);
+        }}
+        title={t("block.deleteConfirm")}
+        message={t("block.deleteConfirm")}
+      />
 
       {isEventModalOpen && (
         <EventoModal
