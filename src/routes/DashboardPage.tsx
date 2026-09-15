@@ -14,7 +14,7 @@ import { supabase } from "../lib/supabase";
 import type { Task } from "../types/database";
 
 // Helper to organize tasks by priority
-const organizeByPriority = (taskList: Task[]) => {
+export const organizeByPriority = (taskList: Task[]) => {
   const urgent = taskList.filter((t) => t.prioridade === "urgente").sort((a, b) => (a.ordem || 0) - (b.ordem || 0));
   const blocking = taskList.filter((t) => t.prioridade === "bloqueadora").sort((a, b) => (a.ordem || 0) - (b.ordem || 0));
   const important = taskList.filter((t) => t.prioridade === "importante").sort((a, b) => (a.ordem || 0) - (b.ordem || 0));
@@ -238,13 +238,23 @@ export const DashboardPage: React.FC = () => {
                 {t("dashboard.noTasksToday")}
               </p>
             ) : (
-              <div className="space-y-6">
+              <div className="space-y-6 relative">
                 {(() => {
                   const byPriority = organizeByPriority(todayTasks);
+                  const allGrouped = [
+                    ...byPriority.urgent,
+                    ...byPriority.blocking,
+                    ...byPriority.important,
+                    ...byPriority.noPriority,
+                  ];
+                  
+                  const displayTasks = allGrouped.slice(0, 6);
+                  const displayByPriority = organizeByPriority(displayTasks);
+
                   return (
                     <>
                       <TaskPriorityGroup
-                        tasks={byPriority.urgent}
+                        tasks={displayByPriority.urgent}
                         prioridade="urgente"
                         onToggle={(id, status) => toggleTask(id, status)}
                         onEdit={(task) => {
@@ -254,7 +264,7 @@ export const DashboardPage: React.FC = () => {
                         onDelete={setTaskToDelete}
                       />
                       <TaskPriorityGroup
-                        tasks={byPriority.blocking}
+                        tasks={displayByPriority.blocking}
                         prioridade="bloqueadora"
                         onToggle={(id, status) => toggleTask(id, status)}
                         onEdit={(task) => {
@@ -264,7 +274,7 @@ export const DashboardPage: React.FC = () => {
                         onDelete={setTaskToDelete}
                       />
                       <TaskPriorityGroup
-                        tasks={byPriority.important}
+                        tasks={displayByPriority.important}
                         prioridade="importante"
                         onToggle={(id, status) => toggleTask(id, status)}
                         onEdit={(task) => {
@@ -274,7 +284,7 @@ export const DashboardPage: React.FC = () => {
                         onDelete={setTaskToDelete}
                       />
                       <TaskPriorityGroup
-                        tasks={byPriority.noPriority}
+                        tasks={displayByPriority.noPriority}
                         prioridade={null}
                         onToggle={(id, status) => toggleTask(id, status)}
                         onEdit={(task) => {
@@ -283,6 +293,17 @@ export const DashboardPage: React.FC = () => {
                         }}
                         onDelete={setTaskToDelete}
                       />
+                      
+                      {allGrouped.length > 6 && (
+                        <div className="pt-2 flex justify-center">
+                          <button
+                            onClick={() => navigate('/hoje')}
+                            className="text-label-md font-medium text-primary hover:text-primary-dark transition-colors flex items-center gap-1 bg-surface-container py-1.5 px-4 rounded-full border border-primary/20 hover:border-primary/50 shadow-sm"
+                          >
+                            Ver todas ({allGrouped.length}) <span>&rarr;</span>
+                          </button>
+                        </div>
+                      )}
                     </>
                   );
                 })()}

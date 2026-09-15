@@ -6,6 +6,7 @@ import { LanguageProvider } from "./contexts/LanguageContext";
 import { SensorialProvider } from "./contexts/SensorialContext";
 import { AuthPage } from "./routes/AuthPage";
 import { DashboardPage } from "./routes/DashboardPage";
+import { HojePage } from "./routes/HojePage";
 import { GaleriaPage } from "./routes/GaleriaPage";
 import { ArquivosBlocoPage } from "./routes/ArquivosBlocoPage";
 import { BlocoDetailPage } from "./routes/BlocoDetailPage";
@@ -66,6 +67,14 @@ function AppRoutes() {
                 element={
                   <DashboardLayout>
                     <DashboardPage />
+                  </DashboardLayout>
+                }
+              />
+              <Route
+                path="/hoje"
+                element={
+                  <DashboardLayout>
+                    <HojePage />
                   </DashboardLayout>
                 }
               />
