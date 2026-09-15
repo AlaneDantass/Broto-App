@@ -65,19 +65,23 @@ export const DashboardPage: React.FC = () => {
     [tasks]
   );
 
-  // Tasks de hoje e sem data fixa
+  // Tasks de hoje (filtradas pelos Blocos do Dia) e sem data fixa
   const todayTasks = useMemo(
     () => {
+      const blocosDoDiaIds = new Set(blocosDoDia.map(b => b.bloco_id));
       console.log("All tasks:", tasks);
+      console.log("Blocos do dia IDs:", blocosDoDiaIds);
+      
       const filtered = tasks.filter(
         (t) =>
           (!t.prazo_data || t.prazo_data === today || t.prazo_data === "null" || t.prazo_data === "") &&
-          t.status !== "concluida"
+          t.status !== "concluida" &&
+          blocosDoDiaIds.has(t.bloco_id)
       );
       console.log("Filtered today tasks:", filtered);
       return filtered;
     },
-    [tasks, today]
+    [tasks, today, blocosDoDia]
   );
 
   // Eventos de hoje
