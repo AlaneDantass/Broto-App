@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Code, Info, Plus, Minus } from "lucide-react";
 import type { Task } from "../types/database";
 import { Modal } from "./Modal";
+import { CustomSelect } from "./CustomSelect";
 import { useLanguage } from "../contexts/LanguageContext";
 import { TextareaComImagens } from "./TextareaComImagens";
 import { extractImagesFromText, buildTextWithImages } from "../utils/imagePaste";
@@ -147,30 +148,17 @@ export const TaskModal: React.FC<TaskModalProps> = ({
             <label className="block text-label-md text-on-surface-variant mb-2">
               {language === "en" ? "Priority" : "Prioridade"}
             </label>
-            <select
+            <CustomSelect
               value={prioridade || ""}
-              onChange={(e) => setPrioridade((e.target.value as any) || null)}
-              className="w-full px-4 py-2 bg-surface border border-outline rounded-lg text-body-md text-on-surface font-dm-sans focus:outline-none focus:border-primary transition-colors cursor-pointer appearance-none"
-              style={{
-                backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23637560'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'right 1rem center',
-                backgroundSize: '1.2em 1.2em'
-              }}
-            >
-              <option value="" className="font-dm-sans py-2">
-                {language === "en" ? "No priority" : "Sem prioridade"}
-              </option>
-              <option value="urgente" className="font-dm-sans py-2">
-                {language === "en" ? "Urgent" : "Urgente"}
-              </option>
-              <option value="bloqueadora" className="font-dm-sans py-2">
-                {language === "en" ? "Blocking" : "Bloqueadora"}
-              </option>
-              <option value="importante" className="font-dm-sans py-2">
-                {language === "en" ? "Important" : "Importante"}
-              </option>
-            </select>
+              onChange={(val) => setPrioridade(val ? (val as any) : null)}
+              placeholder={language === "en" ? "No priority" : "Sem prioridade"}
+              options={[
+                { value: "", label: language === "en" ? "No priority" : "Sem prioridade" },
+                { value: "urgente", label: language === "en" ? "Urgent" : "Urgente" },
+                { value: "bloqueadora", label: language === "en" ? "Blocking" : "Bloqueadora" },
+                { value: "importante", label: language === "en" ? "Important" : "Importante" },
+              ]}
+            />
           </div>
 
           {/* Pomodoros estimados */}

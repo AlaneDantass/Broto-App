@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useConfiguracoes } from "../hooks/useConfiguracoes";
 import { useGoogleAgenda } from "../hooks/useGoogleAgenda";
-import { Card, SkeletonLoader } from "../components";
+import { Card, SkeletonLoader, CustomSelect } from "../components";
 import { SettingsSection } from "../components/SettingsSection";
 import { Clock, Brain, Sliders, Zap, Target, Hash, Puzzle, BookOpen, RefreshCw, Info, Globe, Calendar, CheckCircle2, Loader2, Unlink, Ear, Volume2, Bell, Palette, Minimize2 } from "lucide-react";
 import { useLanguage, type Language } from "../contexts/LanguageContext";
@@ -87,14 +87,15 @@ export const ConfiguracoesPage: React.FC = () => {
         description={t("settings.languageDesc")}
       >
         <div>
-          <select
+          <CustomSelect
             value={language}
-            onChange={(e) => setLanguage(e.target.value as Language)}
-            className="w-full max-w-xs px-4 py-2 bg-surface border border-outline rounded-lg text-body-md text-on-surface focus:outline-none focus:border-primary cursor-pointer"
-          >
-            <option value="pt">Português (BR)</option>
-            <option value="en">English (US)</option>
-          </select>
+            onChange={(val) => setLanguage(val as Language)}
+            className="w-full max-w-xs"
+            options={[
+              { value: "pt", label: "Português (BR)" },
+              { value: "en", label: "English (US)" },
+            ]}
+          />
         </div>
       </SettingsSection>
 
@@ -180,14 +181,14 @@ export const ConfiguracoesPage: React.FC = () => {
           <label className="block text-label-md text-on-surface mb-2">
             Intervalo do Quadro de Rotina
           </label>
-          <select
-            value={config.intervalo_rotina_minutos || 60}
-            onChange={(e) => handleUpdate("intervalo_rotina_minutos", parseInt(e.target.value))}
-            className="w-full px-4 py-2 bg-surface border border-outline rounded-lg text-body-md text-on-surface focus:outline-none focus:border-primary cursor-pointer"
-          >
-            <option value="60">A cada 1 hora</option>
-            <option value="30">A cada 30 minutos</option>
-          </select>
+          <CustomSelect
+            value={String(config.intervalo_rotina_minutos || 60)}
+            onChange={(val) => handleUpdate("intervalo_rotina_minutos", parseInt(val))}
+            options={[
+              { value: "60", label: "A cada 1 hora" },
+              { value: "30", label: "A cada 30 minutos" },
+            ]}
+          />
           <p className="text-body-sm text-on-surface-variant mt-2">
             Define como as linhas de horário serão divididas na visão da semana.
           </p>

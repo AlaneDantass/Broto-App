@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import type { Bloco } from "../types/database";
 import { Modal } from "./Modal";
+import { CustomSelect } from "./CustomSelect";
 import { useLanguage } from "../contexts/LanguageContext";
 import { ColorWheelPicker } from "./ColorWheelPicker";
 import { TextareaComImagens } from "./TextareaComImagens";
@@ -136,17 +137,14 @@ export const BlocoModal: React.FC<BlocoModalProps> = ({
             <label className="block text-label-md text-on-surface-variant mb-2">
               {t("block.category")}
             </label>
-            <select
+            <CustomSelect
               value={categoria}
-              onChange={(e) => setCategoria(e.target.value)}
-              className="w-full px-4 py-2 bg-surface-container-low border border-outline-variant rounded-lg text-on-surface focus:border-primary transition-colors"
-            >
-              {CATEGORIES.map((cat) => (
-                <option key={cat} value={cat}>
-                  {t(`block.cat${cat}`) || cat}
-                </option>
-              ))}
-            </select>
+              onChange={(val) => setCategoria(val)}
+              options={CATEGORIES.map(cat => ({
+                value: cat,
+                label: t(`block.cat${cat}`) || cat
+              }))}
+            />
           </div>
 
           {/* Meta */}
