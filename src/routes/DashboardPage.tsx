@@ -18,7 +18,7 @@ const organizeByPriority = (taskList: Task[]) => {
   const urgent = taskList.filter((t) => t.prioridade === "urgente").sort((a, b) => (a.ordem || 0) - (b.ordem || 0));
   const blocking = taskList.filter((t) => t.prioridade === "bloqueadora").sort((a, b) => (a.ordem || 0) - (b.ordem || 0));
   const important = taskList.filter((t) => t.prioridade === "importante").sort((a, b) => (a.ordem || 0) - (b.ordem || 0));
-  const noPriority = taskList.filter((t) => !t.prioridade).sort((a, b) => (a.ordem || 0) - (b.ordem || 0));
+  const noPriority = taskList.filter((t) => t.prioridade !== "urgente" && t.prioridade !== "bloqueadora" && t.prioridade !== "importante").sort((a, b) => (a.ordem || 0) - (b.ordem || 0));
   return { urgent, blocking, important, noPriority };
 };
 
@@ -67,12 +67,16 @@ export const DashboardPage: React.FC = () => {
 
   // Tasks de hoje e sem data fixa
   const todayTasks = useMemo(
-    () =>
-      tasks.filter(
+    () => {
+      console.log("All tasks:", tasks);
+      const filtered = tasks.filter(
         (t) =>
-          (!t.prazo_data || t.prazo_data === today) &&
+          (!t.prazo_data || t.prazo_data === today || t.prazo_data === "null" || t.prazo_data === "") &&
           t.status !== "concluida"
-      ),
+      );
+      console.log("Filtered today tasks:", filtered);
+      return filtered;
+    },
     [tasks, today]
   );
 
@@ -407,7 +411,7 @@ export const DashboardPage: React.FC = () => {
           }}
           onSubmit={selectedTask ? handleUpdateTask : handleCreateTask}
           initialTask={selectedTask || undefined}
-          blocoId={selectedTask?.bloco_id || geralBloco?.id || "temp-id"}
+          blocoId={selectedTask?.bloco_id || (blocosDoDia.length > 0 ? blocosDoDia[0].bloco_id : geralBloco?.id) || "temp-id"}
           loading={tasksLoading}
         />
       )}
